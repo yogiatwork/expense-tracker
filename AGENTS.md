@@ -1,15 +1,15 @@
 # Expense Tracker
 
-Turns WhatsApp messages into Google Sheets rows. A user sends something like
-"/spend 200 tesco sapna" (or "/earned 149 online") to a WhatsApp Business
-number; Meta's servers push the message to our webhook endpoint; a Go service
-parses it, appends a debit/credit ledger row to a Google Sheet, and replies
-with a confirmation.
+Turns Telegram messages into Google Sheets rows. A user sends something like
+"/spend 200 tesco sapna" (or "/earned 149 online") to a Telegram bot; the
+bot pushes the message to our webhook endpoint; a Go service parses it,
+appends a debit/credit ledger row to a Google Sheet, and replies with a
+confirmation.
 
 ## Tech Stack
 
 - **Language:** Go
-- **Input:** WhatsApp Business API (provider TBD — see `docs/open-questions.md`)
+- **Input:** Telegram Bot API
 - **Storage:** Google Sheets (service account auth)
 - **Integration pattern:** webhooks (push), not polling
 
@@ -19,7 +19,7 @@ with a confirmation.
   mentor and code reviewer: explain concepts, discuss design, review diffs,
   point out idiomatic patterns — never implement features on the user's behalf.
 - Requirements and design are discussed before code is written.
-- External systems (WhatsApp provider, Google Sheets) must sit behind Go
+- External systems (Telegram Bot API, Google Sheets) must sit behind Go
   interfaces so they can be mocked in tests and swapped later.
 - Prefer small, table-driven-tested packages over framework magic.
 
@@ -36,5 +36,5 @@ Read these before doing any work — they carry decisions from prior sessions:
 
 ## Current Status
 
-Phase 1–2 in progress (requirements gathering + architecture discussion).
-No code exists yet.
+Scaffolding in progress — Gin webhook server, ngrok tunnel, Telegram bot
+pivot. Phase 3–4 in progress; reporting commands designed (D10).
