@@ -5,17 +5,11 @@ Unresolved design questions. Each gets answered, then moves into
 
 ---
 
-## Q1 — WhatsApp provider: Meta Cloud API direct vs Twilio? *(open)*
+## Q1 — Input provider choice *(answered 2026-08-22 → D8)*
 
-**Options & tradeoffs:**
-
-| | Meta Cloud API (direct) | Twilio |
-|---|---|---|
-| Cost | Free tier available | Per-message cost |
-| DX | More setup (Meta console, app review), self-managed webhook | Easier onboarding, abstracted webhook |
-| Lock-in | None — official source | Extra vendor layer |
-
-**Leaning:** Meta direct (free tier, no middleman). Unconfirmed.
+**Answered:** Telegram Bot API chosen — instant bot creation via BotFather,
+no business verification, simpler webhook setup, long-polling available for
+dev. Supersedes the earlier Meta/Twilio comparison.
 
 ## Q2 — User scope: who can log expenses? *(open)*
 
@@ -66,9 +60,12 @@ Raised while defining D6; deferred:
 - **Date vocabulary:** keywords only (`today` default, `yesterday`) vs also
   ISO dates for backfill vs day names within the week.
 
-## Q6 — Weekly balance mechanism *(open)*
+## Q6 — Balance/query mechanism *(answered 2026-08-22 → D10)*
 
-Requirement set in D7; production method undecided:
+**Decision:** on-demand commands (`/balance`, `/spendtotal`, `/report`),
+month-scoped, computed by the service from a `Store` read. Scheduled summary
+rows rejected (adds infra + dedupe concerns). Sheet formulas remain an
+optional read-only convenience in the spreadsheet, not part of the service.
 
 - **Sheet formulas** (SUMIFS summary block/tab) — zero service code, always
   current.
@@ -76,7 +73,7 @@ Requirement set in D7; production method undecided:
 - **Scheduled summary rows** — cron appends weekly rows; adds infra plus its
   own dedupe concerns.
 
-**Leaning:** formulas first; `/balance` as a later phase.
+**Answered:** command-based approach (D10); full grammar in `decisions.md`.
 
 ## Q7 — Field symmetry between /spend and /earned *(open)*
 
