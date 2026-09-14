@@ -37,7 +37,7 @@ WORKDIR /home/appuser
 COPY --from=builder /app/quicksnackcafe ./quicksnackcafe
 
 # Ensure the non-root user owns the application binary
-RUN chown quicksnack:quicksnackgroup ./qucksnackcafe
+RUN chown quicksnack:quicksnackgroup ./quicksnackcafe
 
 # Document the port your app listens to
 EXPOSE 8080
