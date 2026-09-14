@@ -1,7 +1,7 @@
 # ==========================================
 # STAGE 1: Build the statically linked binary
 # ==========================================
-FROM golang:1.24-alpine AS builder
+FROM golang:1.26-alpine AS builder
 
 # Install build dependencies
 RUN apk add --no-cache git
