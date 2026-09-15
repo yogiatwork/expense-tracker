@@ -2,6 +2,7 @@ package service
 
 import (
 	"log/slog"
+	"os"
 	"time"
 
 	"github.com/yogiatwork/expense-tracker/config"
@@ -21,10 +22,18 @@ var SheetService *sheetService
 // InitSheetService initializes the sheet service
 func InitSheetService() {
 	// create a new sheet service
-	slog.Info("creating sheet service", slog.String("credentials_file", config.AppConfig.GoogleSheets.CredentialsFile))
-	srv, err := sheets.NewService(nil, option.WithCredentialsFile(config.AppConfig.GoogleSheets.CredentialsFile))
+	slog.Info("creating sheet service")
+
+	credsBytes, ok := os.LookupEnv("SHEET_CREDS_JSON")
+	if !ok {
+		slog.Error("SHEET_CREDS_JSON environment variable not set")
+		return
+	}
+
+	srv, err := sheets.NewService(nil, option.WithAuthCredentialsJSON(option.ServiceAccount, []byte(credsBytes)))
 	if err != nil {
 		slog.Error("failed to create sheet service", slog.String("error", err.Error()))
+		return
 	}
 	slog.Info("sheet service created successfully", slog.Any("service", srv))
 
