@@ -1,6 +1,7 @@
 package service
 
 import (
+	"encoding/base64"
 	"log/slog"
 	"os"
 	"time"
