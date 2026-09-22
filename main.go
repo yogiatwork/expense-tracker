@@ -73,7 +73,7 @@ func main() {
 		}
 	}()
 
-	logger.Info("Server started on port 8080")
+	logger.Info("Server started on port 8081")
 
 	<-ctx.Done()
 	stop()
