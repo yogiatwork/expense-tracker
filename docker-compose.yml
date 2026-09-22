@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  go-app:
+    # Build configuration targeting the Dockerfile in the current directory
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: quicksnackcafe-go-app
+
+    # Automatically restarts the container unless explicitly stopped by an administrator
+    restart: unless-stopped
+
+    # Maps host port 8080 to container port 8080
+    ports:
+      - "8080:8080"
+
+    # Environment variables passed to your Go application
+    environment:
+      - GOWORK=off
+      - APP_ENV=production
+      # - DATABASE_URL=postgres://user:password@db:5432/dbname?sslmode=disable
+
+    # Production Resource Controls: Prevents a rogue container from consuming the whole host
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0" # Maximum 1 CPU core allocation
+          memory: 512M # Maximum 512MB RAM allocation
+        reservations:
+          cpus: "0.25" # Guaranteed 0.25 CPU core
+          memory: 128M # Guaranteed 128MB RAM
+
+    # Prevents Docker log files from expanding infinitely and consuming disk space
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m" # Rotate logs after reaching 10 Megabytes
+        max-file: "3" # Keep a maximum history of 3 log files
+
+
+    # Production Health Checking (Requires 'curl' or a native health check script in your app)
+    # Note: If your app has an internal health route (e.g., /healthz), use this:
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 10s
