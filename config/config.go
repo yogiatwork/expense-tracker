@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"log/slog"
 	"os"
 
@@ -43,9 +44,15 @@ func LoadConfig() error {
 	if gin.Mode() == gin.ReleaseMode {
 		slog.Info("Running in release mode, loading configuration from environment variables")
 		// Load the configuration from the environment variables
+
+		if os.Getenv("BOT_TOKEN") == "" || os.Getenv("BOT_PRIVATE_KEY") == "" {
+			slog.Error("BOT_TOKEN and BOT_PRIVATE_KEY environment variables are required in release mode")
+		}
+
 		if err := os.Setenv("BOT_TOKEN", AppConfig.Telegram.BotToken); err != nil {
 			return err
 		}
+
 		if err := os.Setenv("BOT_PRIVATE_KEY", AppConfig.Telegram.BotKey); err != nil {
 			return err
 		}
