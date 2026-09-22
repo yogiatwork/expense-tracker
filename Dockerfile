@@ -48,5 +48,5 @@ EXPOSE 8081
 USER quicksnack
 
 # Exec form of ENTRYPOINT correctly passes Unix signals for graceful shutdown
-ENTRYPOINT ["/bin/sh", "-c" ," ./quicksnackcafe"]
+ENTRYPOINT ./quicksnackcafe
 
