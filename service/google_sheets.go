@@ -24,13 +24,19 @@ func InitSheetService() {
 	// create a new sheet service
 	slog.Info("creating sheet service")
 
-	credsBytes, ok := os.LookupEnv("SHEET_CREDS_JSON")
+	creadsBase64, ok := os.LookupEnv("SHEET_CREDS_BASE64")
 	if !ok {
-		slog.Error("SHEET_CREDS_JSON environment variable not set")
+		slog.Error("SHEET_CREDS_BASE64 environment variable not set")
 		return
 	}
 
-	srv, err := sheets.NewService(nil, option.WithAuthCredentialsJSON(option.ServiceAccount, []byte(credsBytes)))
+	credsBytes, err := base64.StdEncoding.DecodeString(creadsBase64)
+	if err != nil {
+		slog.Error("failed to decode SHEET_CREDS_BASE64", slog.String("error", err.Error()))
+		return
+	}
+
+	srv, err := sheets.NewService(nil, option.WithAuthCredentialsJSON(option.ServiceAccount, credsBytes))
 	if err != nil {
 		slog.Error("failed to create sheet service", slog.String("error", err.Error()))
 		return
