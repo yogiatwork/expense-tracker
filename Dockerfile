@@ -42,7 +42,7 @@ COPY infra/default.properties ./default.properties
 RUN chown quicksnack:quicksnackgroup ./quicksnackcafe && chmod a+r ./default.properties
 
 # Document the port your app listens to
-EXPOSE 8080
+EXPOSE 8081
 
 # Switch away from root to the secure user
 USER quicksnack
