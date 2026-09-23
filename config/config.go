@@ -45,22 +45,18 @@ func LoadConfig() error {
 		slog.Info("Running in release mode, loading configuration from environment variables")
 		// Load the configuration from the environment variables
 
-		if os.Getenv("BOT_TOKEN") == "" || os.Getenv("BOT_PRIVATE_KEY") == "" {
+		token := os.Getenv("BOT_TOKEN")
+		pvtKey := os.Getenv("BOT_PRIVATE_KEY")
+
+		if token == "" || pvtKey == "" {
 			slog.Error("BOT_TOKEN and BOT_PRIVATE_KEY environment variables are required in release mode")
 		}
 
-		if err := os.Setenv("BOT_TEST", AppConfig.Telegram.BotTest); err != nil {
-			return err
-		}
+		AppConfig.Telegram.BotTest = os.Getenv("BOT_TEST")
 		slog.Info("got a value of Test Bot Env", "test_value", os.Getenv("BOT_TEST"), "config_value", AppConfig.Telegram.BotTest)
 
-		if err := os.Setenv("BOT_TOKEN", AppConfig.Telegram.BotToken); err != nil {
-			return err
-		}
-
-		if err := os.Setenv("BOT_PRIVATE_KEY", AppConfig.Telegram.BotKey); err != nil {
-			return err
-		}
+		AppConfig.Telegram.BotToken = token
+		AppConfig.Telegram.BotKey = pvtKey
 		AppConfig.WhatsappApi.VerifyToken = os.Getenv("WHATSAPP_VERIFY_TOKEN")
 	}
 
