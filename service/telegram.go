@@ -237,7 +237,7 @@ func sendMessage(id int64, txt string) error {
 		slog.Error("failed to post bot response with error " + err.Error())
 		return err
 	}
-	resp.Body.Close()
+	defer resp.Body.Close()
 
 	slog.Info("send message status : " + resp.Status)
 	body, err := io.ReadAll(resp.Body)
