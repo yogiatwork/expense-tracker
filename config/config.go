@@ -16,6 +16,7 @@ type Config struct {
 		BotToken string `properties:"bot.token,default:''"`
 		BotEmail string `properties:"bot.client_email"`
 		BotKey   string `properties:"bot.private_key,default:''"`
+		BotTest  string `properties:"bot.test,default:''"`
 	} `properties:"telegram"`
 
 	GoogleSheets struct {
@@ -47,6 +48,11 @@ func LoadConfig() error {
 		if os.Getenv("BOT_TOKEN") == "" || os.Getenv("BOT_PRIVATE_KEY") == "" {
 			slog.Error("BOT_TOKEN and BOT_PRIVATE_KEY environment variables are required in release mode")
 		}
+
+		if err := os.Setenv("BOT_TEST", AppConfig.Telegram.BotTest); err != nil {
+			return err
+		}
+		slog.Info("got a value of Test Bot Env", "test_value", os.Getenv("BOT_TEST"), "config_value", AppConfig.Telegram.BotTest)
 
 		if err := os.Setenv("BOT_TOKEN", AppConfig.Telegram.BotToken); err != nil {
 			return err
